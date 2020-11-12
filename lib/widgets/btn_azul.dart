@@ -17,7 +17,7 @@ class BotonAzul extends StatelessWidget {
     return RaisedButton(
             elevation: 2,
             hoverElevation: 5,
-            color: Colors.blue,
+            color: Colors.black,
             shape: StadiumBorder(),
             onPressed: this.onPressed,
             child: Container(
