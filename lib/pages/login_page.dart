@@ -1,5 +1,6 @@
 import 'package:chat/helpers/mostrar_alerta.dart';
 import 'package:chat/services/auth_service.dart';
+import 'package:chat/services/socket_service.dart';
 import 'package:chat/widgets/btn_azul.dart';
 import 'package:chat/widgets/custom_input.dart';
 import 'package:chat/widgets/labels.dart';
@@ -18,9 +19,9 @@ class LoginPage extends StatelessWidget {
           child: Container(
             height: MediaQuery.of(context).size.height * 0.9,
             child: Column(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: <Widget>[
-                Logo(titulo: 'S i l e n t',),
+                Logo(titulo: 'Bienvenido'),
                 _Form(),
                 Labels(ruta: 'register', titulo: '¿No tienes cuenta?',subtitulo: 'Crea una ahora!'),
                 Text('Terminos y condiciones de uso',style: TextStyle(fontWeight: FontWeight.w200))
@@ -45,9 +46,12 @@ class __FormState extends State<_Form> {
   Widget build(BuildContext context) {
 
     final authService = Provider.of<AuthService>(context);
+    final socketService = Provider.of<SocketService>(context);
+    
+
 
     return Container(
-      margin: EdgeInsets.only(top:40),
+      margin: EdgeInsets.only(top:20),
       padding: EdgeInsets.symmetric(horizontal:50),
       child: Column(
         children: <Widget>[
@@ -57,12 +61,14 @@ class __FormState extends State<_Form> {
             keyboardType: TextInputType.emailAddress,
             textController: emailCtrl,
           ),
+          SizedBox(height: 10),
           CustomInput(
             icon: Icons.lock_outline,
             placeholder: 'Contraseña',
             textController: passCtrl,
             isPassword: true,
           ),
+          SizedBox(height: 10),
 
           //crear boton 
           
@@ -75,7 +81,7 @@ class __FormState extends State<_Form> {
               final loginOk  = await authService.login(emailCtrl.text.trim(), passCtrl.text.trim());
 
               if(loginOk){
-                //TO DO navegar otra pantalla
+                socketService.connect();
                 Navigator.pushReplacementNamed(context, 'usuarios');
               }else{
                 //mostrar alerta 
